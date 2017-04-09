@@ -37,7 +37,8 @@ object ADAMMain {
           Transform,
           TransformFeatures,
           MergeShards,
-          Reads2Coverage
+          Reads2Coverage,
+          Matching
         )
       ),
       CommandGroup(

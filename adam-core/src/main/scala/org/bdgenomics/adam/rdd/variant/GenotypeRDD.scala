@@ -36,7 +36,7 @@ import org.bdgenomics.utils.interval.array.{
   IntervalArray,
   IntervalArraySerializer
 }
-import org.bdgenomics.formats.avro.{ Contig, Genotype, Sample }
+import org.bdgenomics.formats.avro.{ Contig, Genotype, Sample, Variant }
 import scala.reflect.ClassTag
 
 private[adam] case class GenotypeArray(
@@ -162,6 +162,16 @@ case class GenotypeRDD(rdd: RDD[Genotype],
                 asSingleFile: Boolean,
                 stringency: ValidationStringency) {
     toVariantContextRDD.saveAsVcf(filePath, asSingleFile, stringency)
+  }
+
+  /**
+   * Filters genotypes by variant names
+   *
+   * @param rsId The variant name to filter
+   * @return Returns a VariantRDD containing the filtered variants
+   */
+  def filterVariants(rsId: String): RDD[Variant] = {
+    rdd.map(genotype => genotype.variant).filter(variant => variant.names.contains(rsId))
   }
 
   /**
